@@ -1,6 +1,15 @@
 #! /bin/bash
 #  /etc/init.d/pocsag
-#
+
+### BEGIN INIT INFO
+# Provides: pocsag scanning and decoding features
+# Required-Start: 
+# Required-Stop: 
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: scans a pocsag frequency and decode the content
+# Description: --
+### END INIT INFO
 
 # Some things that run always
 touch /var/lock/pocsag
