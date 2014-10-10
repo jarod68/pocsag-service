@@ -1,0 +1,26 @@
+#!/bin/bash
+
+source /pocsag/pocsag.conf
+
+function store
+{
+	if [ ! -z "$@" -a "$@" != " "  ] ; then
+		filename=`date +%d-%m-%Y`@"$pocsag_freq"Hz.txt
+		echo "$@" >> $pocsag_save_path$filename
+	fi
+}
+
+case "$1" in
+ 'start')
+	rmmod dvb_usb_rtl28xxu
+
+	rtl_fm -f $pocsag_freq -M fm -s 22050 -g 30 -E dc -F 0 | multimon-ng -t raw -a POCSAG512 -a POCSAG1200 -a POCSAG2400 -f alpha -p -b1 /dev/stdin | { while read line; do store "$line"; done } &
+
+  	echo "$(tput setaf 6)pocsag monitoring started$(tput sgr 0)";; 
+ 'stop')
+   	echo "$(tput setaf 6)Shutdown pocsag monitoring$(tput sgr 0)"
+   	ps aux | grep -ie pocsag | awk '{print $2}' | xargs kill -9
+   	ps aux | grep -ie rtl_fm | awk '{print $2}' | xargs kill -9
+   	ps aux | grep -ie multimon-ng | awk '{print $2}' | xargs kill -9
+;;
+esac
