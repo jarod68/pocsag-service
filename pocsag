@@ -22,5 +22,10 @@ case "$1" in
    	ps aux | grep -ie pocsag | awk '{print $2}' | xargs kill -9
    	ps aux | grep -ie rtl_fm | awk '{print $2}' | xargs kill -9
    	ps aux | grep -ie multimon-ng | awk '{print $2}' | xargs kill -9
-;;
+	;;
+  *)
+	echo "Usage: /etc/init.d/blah {start|stop}"
+	exit 1
+    	;;
+
 esac
