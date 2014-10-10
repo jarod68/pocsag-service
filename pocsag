@@ -1,4 +1,9 @@
-#!/bin/bash
+#! /bin/bash
+#  /etc/init.d/pocsag
+#
+
+# Some things that run always
+touch /var/lock/pocsag
 
 source /pocsag/pocsag.conf
 
@@ -24,7 +29,7 @@ case "$1" in
    	ps aux | grep -ie multimon-ng | awk '{print $2}' | xargs kill -9
 	;;
   *)
-	echo "Usage: /etc/init.d/blah {start|stop}"
+	echo "Usage: /etc/init.d/pocsag {start|stop}"
 	exit 1
     	;;
 
