@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 #  /etc/init.d/pocsag
 
 ### BEGIN INIT INFO
@@ -12,13 +12,13 @@
 ### END INIT INFO
 
 # Some things that run always
-touch /var/lock/pocsag
+#touch /var/lock/pocsag
 
 source /pocsag/pocsag.conf
 
 function store
 {
-	if [ ! -z "$@" -a "$@" != " "  ] ; then
+	if [[ "$@" == *Alpha:* ]] ; then
 		filename=`date +%d-%m-%Y`@"$pocsag_freq"Hz.txt
 		echo "$@" >> $pocsag_save_path$filename
 	fi
