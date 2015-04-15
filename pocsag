@@ -14,21 +14,30 @@
 # Some things that run always
 #touch /var/lock/pocsag
 
-source /pocsag/pocsag.conf
+source pocsag.conf
 
-function store
+function store1
 {
 	if [[ "$@" == *Alpha:* ]] ; then
-		filename=`date +%d-%m-%Y`@"$pocsag_freq"Hz.txt
-		echo "$@" >> $pocsag_save_path$filename
+		filename1=`date +%d-%m-%Y`@"$pocsag_freq1"Hz.txt
+		echo "$@" >> $pocsag_save_path$filename1
 	fi
+}
+
+function store2
+{
+        if [[ "$@" == *Alpha:* ]] ; then
+                filename2=`date +%d-%m-%Y`@"$pocsag_freq2"Hz.txt
+                echo "$@" >> $pocsag_save_path$filename2
+        fi
 }
 
 case "$1" in
  'start')
 	rmmod dvb_usb_rtl28xxu
 
-	rtl_fm -f $pocsag_freq -M fm -s 22050 -g 30 -E dc -F 0 | multimon-ng -t raw -a POCSAG512 -a POCSAG1200 -a POCSAG2400 -f alpha -p -b1 /dev/stdin | { while read line; do store "$line"; done } &
+	rtl_fm -f $pocsag_freq1 -M fm -s 22050 -g 30 -E dc -F 0 -d 0| multimon-ng -t raw -a POCSAG512 -a POCSAG1200 -a POCSAG2400 -f alpha -p -b1 /dev/stdin | { while read line; do store1 "$line"; done } &
+	rtl_fm -f $pocsag_freq2 -M fm -s 22050 -g 30 -E dc -F 0 -d 1| multimon-ng -t raw -a POCSAG512 -a POCSAG1200 -a POCSAG2400 -f alpha -p -b1 /dev/stdin | { while read line; do store2 "$line"; done } &
 
   	echo "$(tput setaf 6)pocsag monitoring started$(tput sgr 0)";; 
  'stop')
